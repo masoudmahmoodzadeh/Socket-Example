@@ -7,7 +7,7 @@ typedef OnDisConnected = Function();
 typedef OnReceive = Function(dynamic data);
 
 class SocketManager {
-  final String ip;
+  late String ip;
   final int port;
   late IO.Socket socket;
 
@@ -23,7 +23,12 @@ class SocketManager {
       "autoConnect": false,
     };
 
-    socket = IO.io('$ip:$port', options);
+    String protocol = "";
+    if (!ip.startsWith("http")) {
+      protocol = "http://";
+    }
+
+    socket = IO.io('$protocol$ip:$port', options);
     socket.onConnect((_) {
       onConnected(socket.id);
     });
