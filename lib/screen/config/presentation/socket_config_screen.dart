@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:socket_example/base/base_colors.dart';
-import 'package:socket_example/base/widgets/gradient_button.dart';
 
+import '../../../base/base_colors.dart';
 import '../../../base/widgets/custom_ip_field.dart';
 import '../../../base/widgets/custom_port_field.dart';
+import '../../../base/widgets/gradient_button.dart';
 import '../../../socket/socket_manager.dart';
+import '../../posts/presentation/ListPostsScreen.dart';
 
 class SocketConfigScreen extends StatefulWidget {
   const SocketConfigScreen({Key? key}) : super(key: key);
@@ -17,6 +17,7 @@ class SocketConfigScreen extends StatefulWidget {
 class _SocketConfigScreenState extends State<SocketConfigScreen> {
   var ipController = TextEditingController();
   var portController = TextEditingController();
+  bool isSocketConnecting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +52,37 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
   }
 
   Widget _buildBtnConnect() {
-    return GradientButton(
-      onPressed: () {
-        SocketManager socketManager =
-            SocketManager(ipController.text, int.parse(portController.text));
-        socketManager.connect(
-          onConnected: (String? id) {
-            if (kDebugMode) {
-              print("Socket Connected. id = $id");
-            }
-          },
-          onConnecting: () {
-            if (kDebugMode) {
-              print("Socket onConnecting...");
-            }
-          },
-          onDisConnected: () {
-            if (kDebugMode) {
-              print("Socket Disconnected");
-            }
-          },
-        );
-      },
-      title: 'Connect',
-    );
+    return isSocketConnecting
+        ? const CircularProgressIndicator()
+        : GradientButton(
+            onPressed: () {
+              String ip = ipController.text;
+              int port = int.parse(portController.text);
+              SocketManager socketManager = SocketManager(ip, port);
+              socketManager.connect(
+                onConnected: (String? id) {
+                  setState(() {
+                    isSocketConnecting = false;
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ListPostsScreen(),
+                        ));
+                  });
+                },
+                onConnecting: () {
+                  setState(() {
+                    isSocketConnecting = true;
+                  });
+                },
+                onDisConnected: () {
+                  setState(() {
+                    isSocketConnecting = false;
+                  });
+                },
+              );
+            },
+            title: 'Connect',
+          );
   }
 }
