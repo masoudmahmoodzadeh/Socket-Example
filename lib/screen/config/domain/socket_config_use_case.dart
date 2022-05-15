@@ -4,7 +4,6 @@ import '../../../socket/socket_manager.dart';
 
 class SocketConfigUseCase {
   void connect({
-    required SocketManager socketManager,
     required String ip,
     required int port,
     required OnConnected onConnected,
@@ -12,7 +11,6 @@ class SocketConfigUseCase {
     required OnDisConnected onDisConnected,
   }) {
     SocketRepository().connect(
-      socketManager,
       ip,
       port,
       onConnected,

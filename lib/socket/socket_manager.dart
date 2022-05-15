@@ -7,8 +7,13 @@ typedef OnDisConnected = Function();
 typedef OnReceive = Function(dynamic data);
 
 class SocketManager {
-
   late IO.Socket socket;
+
+  SocketManager._privateConstructor();
+
+  static final SocketManager _instance = SocketManager._privateConstructor();
+
+  static SocketManager get instance => _instance;
 
   IO.Socket connect({
     required String ip,

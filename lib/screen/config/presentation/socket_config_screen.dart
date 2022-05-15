@@ -5,21 +5,27 @@ import '../../../base/base_colors.dart';
 import '../../../base/widgets/custom_ip_field.dart';
 import '../../../base/widgets/custom_port_field.dart';
 import '../../../base/widgets/gradient_button.dart';
-import '../../posts/presentation/ListPostsScreen.dart';
+import '../../posts/presentation/list_posts_screen.dart';
 import 'socket_config_cubit.dart';
 import 'socket_config_state.dart';
 
-class SocketConfigScreen extends StatefulWidget {
+class SocketConfigScreen extends StatelessWidget {
   const SocketConfigScreen({Key? key}) : super(key: key);
 
   @override
-  _SocketConfigScreenState createState() => _SocketConfigScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider<SocketConfigCubit>(
+      create: (BuildContext context) => SocketConfigCubit(),
+      child: _ConfigView(),
+    );
+  }
 }
 
-class _SocketConfigScreenState extends State<SocketConfigScreen> {
-  var ipController = TextEditingController();
-  var portController = TextEditingController();
-  bool isSocketConnecting = false;
+class _ConfigView extends StatelessWidget {
+  final ipController = TextEditingController();
+  final portController = TextEditingController();
+
+  _ConfigView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +37,11 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildIp(),
+              _buildIp(context),
               const SizedBox(height: 16),
-              _buildPort(),
+              _buildPort(context),
               const SizedBox(height: 32),
-              _buildBtnConnect(),
+              _buildBtnConnect(context),
             ],
           ),
         ),
@@ -43,7 +49,7 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
     );
   }
 
-  Widget _buildIp() {
+  Widget _buildIp(BuildContext context) {
     return CustomIpField(
       controller: ipController,
       onChanged: (String ip) {
@@ -52,7 +58,7 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
     );
   }
 
-  Widget _buildPort() {
+  Widget _buildPort(BuildContext context) {
     return CustomPortField(
       controller: portController,
       onChanged: (String port) {
@@ -61,29 +67,27 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
     );
   }
 
-  Widget _buildBtnConnect() {
-    return isSocketConnecting
-        ? const CircularProgressIndicator()
-        : BlocConsumer<SocketConfigCubit, SocketConfigState>(
-            builder: (context, state) {
-            if (state.isLoading()) {
-              return const CircularProgressIndicator();
-            } else {
-              return GradientButton(
-                onPressed: () {
-                  context.read<SocketConfigCubit>().connect();
-                },
-                title: 'Connect',
-              );
-            }
-          }, listener: (context, state) {
-            if (state.isSuccess()) {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ListPostsScreen(),
-                  ));
-            }
-          });
+  Widget _buildBtnConnect(BuildContext context) {
+    return BlocConsumer<SocketConfigCubit, SocketConfigState>(
+        builder: (context, state) {
+      if (state.isLoading()) {
+        return const CircularProgressIndicator();
+      } else {
+        return GradientButton(
+          onPressed: () {
+            context.read<SocketConfigCubit>().connect();
+          },
+          title: 'Connect',
+        );
+      }
+    }, listener: (context, state) {
+      if (state.isSuccess()) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ListPostsScreen(),
+            ));
+      }
+    });
   }
 }

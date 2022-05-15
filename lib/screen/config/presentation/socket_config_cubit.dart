@@ -5,7 +5,6 @@ import 'package:socket_example/screen/config/presentation/socket_config_state.da
 import 'package:socket_example/socket/socket_manager.dart';
 
 class SocketConfigCubit extends Cubit<SocketConfigState> {
-  SocketManager socketManager = SocketManager();
 
   SocketConfigCubit() : super(SocketConfigState.initial());
 
@@ -19,7 +18,6 @@ class SocketConfigCubit extends Cubit<SocketConfigState> {
 
   void connect() {
     SocketConfigUseCase().connect(
-      socketManager: socketManager,
       ip: state.ip,
       port: state.port,
       onConnected: (id) {
@@ -32,5 +30,10 @@ class SocketConfigCubit extends Cubit<SocketConfigState> {
         emit(state.copyWith(status: FailedStatus("Socket disconnected....")));
       },
     );
+  }
+
+  void isConnect(){
+    bool isConnected = SocketManager.instance.socket.connected;
+    print(isConnected);
   }
 }
