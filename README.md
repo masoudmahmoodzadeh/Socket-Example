@@ -6,7 +6,7 @@ developed with **Flutter**
 
 - **Clean Architecture**
 - **[Bloc](https://pub.dev/packages/flutter_bloc)**
-- **[socket Io Client](https://pub.dev/packages/socket_io_client)**
+- **[Socket Io Client](https://pub.dev/packages/socket_io_client)**
 - **[Equatable](https://pub.dev/packages/equatable)**
 
 ## Screenshots
