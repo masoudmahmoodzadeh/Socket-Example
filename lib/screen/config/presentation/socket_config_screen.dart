@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../base/base_colors.dart';
 import '../../../base/widgets/custom_ip_field.dart';
 import '../../../base/widgets/custom_port_field.dart';
 import '../../../base/widgets/gradient_button.dart';
-import '../../../socket/socket_manager.dart';
 import '../../posts/presentation/ListPostsScreen.dart';
+import 'socket_config_cubit.dart';
+import 'socket_config_state.dart';
 
 class SocketConfigScreen extends StatefulWidget {
   const SocketConfigScreen({Key? key}) : super(key: key);
@@ -42,47 +44,46 @@ class _SocketConfigScreenState extends State<SocketConfigScreen> {
   }
 
   Widget _buildIp() {
-    return CustomIpField(controller: ipController);
+    return CustomIpField(
+      controller: ipController,
+      onChanged: (String ip) {
+        context.read<SocketConfigCubit>().setIp(ip);
+      },
+    );
   }
 
   Widget _buildPort() {
     return CustomPortField(
       controller: portController,
+      onChanged: (String port) {
+        context.read<SocketConfigCubit>().setPort(int.parse(port));
+      },
     );
   }
 
   Widget _buildBtnConnect() {
     return isSocketConnecting
         ? const CircularProgressIndicator()
-        : GradientButton(
-            onPressed: () {
-              String ip = ipController.text;
-              int port = int.parse(portController.text);
-              SocketManager socketManager = SocketManager(ip, port);
-              socketManager.connect(
-                onConnected: (String? id) {
-                  setState(() {
-                    isSocketConnecting = false;
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ListPostsScreen(),
-                        ));
-                  });
+        : BlocConsumer<SocketConfigCubit, SocketConfigState>(
+            builder: (context, state) {
+            if (state.isLoading()) {
+              return const CircularProgressIndicator();
+            } else {
+              return GradientButton(
+                onPressed: () {
+                  context.read<SocketConfigCubit>().connect();
                 },
-                onConnecting: () {
-                  setState(() {
-                    isSocketConnecting = true;
-                  });
-                },
-                onDisConnected: () {
-                  setState(() {
-                    isSocketConnecting = false;
-                  });
-                },
+                title: 'Connect',
               );
-            },
-            title: 'Connect',
-          );
+            }
+          }, listener: (context, state) {
+            if (state.isSuccess()) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ListPostsScreen(),
+                  ));
+            }
+          });
   }
 }

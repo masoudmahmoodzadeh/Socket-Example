@@ -7,13 +7,12 @@ typedef OnDisConnected = Function();
 typedef OnReceive = Function(dynamic data);
 
 class SocketManager {
-  late String ip;
-  final int port;
+
   late IO.Socket socket;
 
-  SocketManager(this.ip, this.port);
-
-  void connect({
+  IO.Socket connect({
+    required String ip,
+    required int port,
     required OnConnected onConnected,
     required OnConnecting onConnecting,
     required OnDisConnected onDisConnected,
@@ -40,6 +39,8 @@ class SocketManager {
     });
 
     socket.connect();
+
+    return socket;
   }
 
   void send(BaseRequestSocket req, OnReceive onReceive) {
