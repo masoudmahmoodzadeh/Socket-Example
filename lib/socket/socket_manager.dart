@@ -4,7 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 typedef OnConnected = Function(String? id);
 typedef OnConnecting = Function();
 typedef OnDisConnected = Function();
-typedef OnReceive = Function(dynamic data);
+typedef OnReceive = Function(dynamic response);
 
 class SocketManager {
   late IO.Socket socket;
