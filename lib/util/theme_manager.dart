@@ -11,6 +11,7 @@ class ThemeManager {
       ),
       inputDecorationTheme: _inputDecoration(),
       elevatedButtonTheme: _buildElevatedButton(),
+      cardTheme: _buildCardTheme(),
       primarySwatch: Colors.blue,
     );
   }
@@ -41,4 +42,14 @@ class ThemeManager {
       ),
     );
   }
+
+  CardTheme _buildCardTheme(){
+    return CardTheme(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    );
+  }
+
 }

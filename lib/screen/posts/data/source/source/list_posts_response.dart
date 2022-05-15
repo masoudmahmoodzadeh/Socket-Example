@@ -1,5 +1,6 @@
 class ListPostsResponse {
   final String name;
+  final String logo;
   final bool isVerified;
   final String username;
   final String imageUrl;
@@ -10,6 +11,7 @@ class ListPostsResponse {
 
   ListPostsResponse({
     required this.name,
+    required this.logo,
     required this.isVerified,
     required this.username,
     required this.imageUrl,
@@ -22,6 +24,7 @@ class ListPostsResponse {
   factory ListPostsResponse.fromJson(Map<String, dynamic> json) {
     return ListPostsResponse(
       name: json['name'],
+      logo: json['logo'],
       isVerified: json['is_verified'],
       username: json['username'],
       imageUrl: json['image_url'],
@@ -35,6 +38,7 @@ class ListPostsResponse {
   Map<String, dynamic> toJson() {
     return {
       "name": name,
+      "logo": logo,
       "is_verified": isVerified,
       "username": username,
       "image_url": imageUrl,
