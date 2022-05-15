@@ -1,16 +1,16 @@
-# socket_example
+# Socket Example
 
-A new Flutter project.
+developed with **Flutter**
 
-## Getting Started
+## Technologies
 
-This project is a starting point for a Flutter application.
+- **Clean Architecture**
+- **[Bloc](https://pub.dev/packages/flutter_bloc)**
+- **[socket Io Client](https://pub.dev/packages/socket_io_client)**
+- **[Equatable](https://pub.dev/packages/equatable)**
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![Screenshot-01](/screenshots/screenshot-01.png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot-02](/screenshots/screenshot-02.png)
