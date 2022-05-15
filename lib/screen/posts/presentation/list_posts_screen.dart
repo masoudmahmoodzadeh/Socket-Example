@@ -35,6 +35,7 @@ class _ListPostView extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             return ListView.separated(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.all(16),
               itemCount: state.response.length,
               itemBuilder: (context, index) {
